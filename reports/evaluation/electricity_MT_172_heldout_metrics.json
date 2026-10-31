@@ -1,0 +1,34 @@
+[
+  {
+    "dataset":"electricity_MT_172",
+    "champion":"hist_gradient_boosting",
+    "train_n":84096,
+    "validation_n":28032,
+    "test_n":28032,
+    "target_unit":"original_dataset_energy_units",
+    "MAE":7.4591403111,
+    "RMSE":9.7907970418,
+    "sMAPE_percent":6.4127820422,
+    "peak_threshold_train_p90":176.537979126,
+    "actual_peaks":926,
+    "predicted_peaks":715,
+    "peak_precision":0.8657342657,
+    "peak_recall":0.6684665227,
+    "peak_f1":0.7544180378,
+    "peak_confusion_matrix":[
+      [
+        27010,
+        96
+      ],
+      [
+        307,
+        619
+      ]
+    ],
+    "time_min":"2011-01-02 00:15:00",
+    "time_max":"2015-01-01 00:00:00",
+    "feature_count":21,
+    "split_policy":"chronological_60_20_20",
+    "claim_boundary":"one-step-ahead prediction conditional on observed prior values; not deployment generalization"
+  }
+]

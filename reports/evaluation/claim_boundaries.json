@@ -1,0 +1,13 @@
+{
+  "task": "one-step energy value forecasting and threshold-based peak flagging; NOT actual failure detection",
+  "selection": "champion chosen solely by validation MAE, test read after selection",
+  "splits": "chronological within each series; no shuffle, but temporal autocorrelation is expected",
+  "leakage": "lag and rolling features use previous observations only; timestamps must be available at forecast time",
+  "baselines": "lag_96 means prior day at 15min cadence, but 16 hours earlier for 10min Appliances",
+  "peak_definition": "90th percentile of training targets, applied unchanged to future validation/test; peak event is derived, not independently labeled",
+  "electricity": "subset selected by completeness; 370 clients not fully benchmarked with default setting",
+  "dataset_domains": "Steel industrial, Electricity commercial/consumer, Appliances residential; not interchangeable",
+  "operational": "No cost optimization, demand-control actuation, tariff inference, grid dispatch, future exogenous forecasts, or live IoT sensor connectivity",
+  "external_generalization": "No external deployment evidence or confidence intervals; distribution shifts possible",
+  "quality": "Missing and duplicate timestamps reported; rows with invalid prior context excluded, not silently filled from future information"
+}

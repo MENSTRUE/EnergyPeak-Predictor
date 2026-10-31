@@ -1,0 +1,34 @@
+[
+  {
+    "dataset":"electricity_MT_169",
+    "champion":"random_forest_160",
+    "train_n":84096,
+    "validation_n":28032,
+    "test_n":28032,
+    "target_unit":"original_dataset_energy_units",
+    "MAE":1.9160280893,
+    "RMSE":2.5768020305,
+    "sMAPE_percent":4.6880187145,
+    "peak_threshold_train_p90":53.1815567017,
+    "actual_peaks":4502,
+    "predicted_peaks":3835,
+    "peak_precision":0.8182529335,
+    "peak_recall":0.6970235451,
+    "peak_f1":0.7527887729,
+    "peak_confusion_matrix":[
+      [
+        22833,
+        697
+      ],
+      [
+        1364,
+        3138
+      ]
+    ],
+    "time_min":"2011-01-02 00:15:00",
+    "time_max":"2015-01-01 00:00:00",
+    "feature_count":21,
+    "split_policy":"chronological_60_20_20",
+    "claim_boundary":"one-step-ahead prediction conditional on observed prior values; not deployment generalization"
+  }
+]

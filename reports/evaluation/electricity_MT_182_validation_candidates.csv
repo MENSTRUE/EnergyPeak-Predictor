@@ -1,0 +1,4 @@
+dataset,candidate,MAE,RMSE,sMAPE_percent,selection_split
+electricity_MT_182,hist_gradient_boosting,2.926853661586996,3.770953991244592,6.242447681429126,validation_only
+electricity_MT_182,random_forest_160,2.935910702703132,3.783680205374377,6.252650748044101,validation_only
+electricity_MT_182,seasonal_naive_lag96,4.1655878304210425,5.658503925576492,8.728911755146887,validation_only

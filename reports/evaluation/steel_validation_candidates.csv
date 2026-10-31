@@ -1,0 +1,4 @@
+dataset,candidate,MAE,RMSE,sMAPE_percent,selection_split
+steel,random_forest_160,4.275959583884522,9.149298579034673,13.402470569474495,validation_only
+steel,hist_gradient_boosting,4.417076510223365,9.106085918717051,17.8244608001717,validation_only
+steel,seasonal_naive_lag96,14.98117184146516,28.61721188394974,43.995151298755346,validation_only

@@ -1,0 +1,19 @@
+{
+  "input_found": true,
+  "dataset_inventory": {
+    "steel": true,
+    "electricity": true,
+    "appliances": true
+  },
+  "primary_metrics_exist": true,
+  "secondary_metrics_exist": true,
+  "auxiliary_metrics_exist": true,
+  "models_exported": 14,
+  "peak_cutoffs_train_only": true,
+  "chronological_splits": true,
+  "validation_only_champion_selection": true,
+  "domain_separation": true,
+  "provenance_written": true,
+  "limits_documented": true,
+  "status": "PASS_REPRODUCIBILITY"
+}

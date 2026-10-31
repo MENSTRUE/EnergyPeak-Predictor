@@ -1,0 +1,4 @@
+dataset,source,role,target,interval,scope
+Steel Industry Energy Consumption,https://archive.ics.uci.edu/dataset/851/steel+industry+energy+consumption,primary industrial forecasting,Usage_kWh,15min,one industrial facility
+ElectricityLoadDiagrams20112014,https://archive.ics.uci.edu/dataset/321/electricityloaddiagrams20112014,secondary multi-consumer forecasting,MT_###,15min,individual client streams
+Appliances Energy Prediction,https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction,auxiliary cross-domain forecasting,Appliances,10min,residential building
