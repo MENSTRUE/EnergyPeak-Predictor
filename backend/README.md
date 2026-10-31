@@ -1,59 +1,21 @@
-# EnergyPeak Predictor — FastAPI research backend
+# Backend — EnergyPeak Predictor
 
-Real read-only Kaggle evaluation snapshots and optional **explicit-feature** artifact inference. Nothing in this backend monitors the electricity grid, and the API **does not** forecast from timestamp alone. No data, prediction, test metric, or confidence value is fabricated.
+## Purpose / Tujuan
 
-## Confirmed repository layout
+**Research layer:** Kaggle notebook creates reports and serialized artifacts. **API:** FastAPI serves health, series inventory, saved metrics, paginated forecast samples, audit/manifest reports and conditional model inspection/prediction. **UI:** React + Vite + TypeScript exposes Overview, Forecast Explorer, Model Inference and Research & Audit. Reports are read-only snapshots. `GET /api/v1/health`, `/api/v1/series`, `/api/v1/series/{series_id}/metrics`, `/api/v1/series/{series_id}/forecast`, `/api/v1/reports/model-manifest`, `/api/v1/reports/{name}`, `/api/v1/models/{series_id}`, `POST /api/v1/predict/{series_id}`. Inference requires the trusted local joblib, exact named historical features, and compatible sklearn version.
 
-The Kaggle run saved metrics under `reports/evaluation/*_heldout_metrics.json` (each a JSON list with one result), historical prediction rows under `reports/forecasts/*_heldout_predictions.csv`, and a model manifest under `reports/audit/model_manifest.csv`. The manifest lists 14 series and champion artifacts. Models in `models/champion/` are intentionally ignored by git by default and must be placed on the operator's machine.
+## Scientific safeguards
 
-## Local installation — Windows PowerShell
+Supported: within-series, one-step-ahead retrospective evaluation, saved Kaggle metrics, trained champion selection on validation MAE, threshold-derived peak indicators. Unsupported: real-time IoT sensing, day-ahead dispatch, tariff/cost savings, peak guarantees, generic forecasts from timestamp alone, grid actuation or validated external generalization. Never equate model presence with successful deserialization or prediction readiness.
 
-```powershell
-cd "D:\porto\100 day\day 27\EnergyPeak Predictor\backend"
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-Copy-Item .env.example .env
-python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-```
+## Technical notes
 
-Open `http://127.0.0.1:8000/docs` and `/api/v1/health`. Run tests via `python -m pytest -q`.
+`notebooks/` research master; `data/{raw,interim,processed,external}/` ignored local datasets; `models/{baseline,champion}/` local artifacts (not committed); `reports/{audit,evaluation,experiments,forecasts}/` saved results; `assets/plots/` fourteen real forecast PNGs; `assets/screenshots/` four app captures; `backend/app/` FastAPI; `frontend/src/` React; `docs/{en,id}/` paired documentation; `scripts/` helpers; `tests/` checks; `LICENSE` MIT. See `docs/en/repository-map.md` for a fuller map.
 
-## Endpoints
+## Validation
 
-| Endpoint | Purpose |
-| --- | --- |
-| `GET /api/v1/health` | API and artifact presence, never a readiness guarantee |
-| `GET /api/v1/series` | IDs discovered from saved report filenames |
-| `GET /api/v1/series/{series_id}/metrics` | Actual held-out metrics as recorded by Kaggle |
-| `GET /api/v1/series/{series_id}/forecast?limit=100&offset=0` | Read-only held-out prediction rows |
-| `GET /api/v1/reports/model-manifest` | Champion model manifest CSV |
-| `GET /api/v1/reports/research_gate` | Research gate JSON |
-| `GET /api/v1/reports/run_config` | Split and lag configuration |
-| `GET /api/v1/reports/claim_boundaries` | Approved claims and limitations |
-| `GET /api/v1/reports/electricity_results` | Electricity study summary |
-| `GET /api/v1/models/{series_id}` | Inspect local serialized artifact and feature contract |
-| `POST /api/v1/predict/{series_id}` | Optional one-step model inference from named historical features |
+Backend: `cd backend`, activate Python virtual environment, `python -m pytest -q`, `python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`; check `/docs` and `/api/v1/health`. Frontend: `cd frontend`, `npm install`, `npm run build`, `npm run dev`; inspect `http://127.0.0.1:5173`. Manual integration: exercise each series, forecast pagination and empty states, model schema and a legitimate 21-feature input, research gate and error handling. Screenshots show local application views, not proof all routes/models pass.
 
-`POST /api/v1/predict/steel` accepts `{"features":{"exact_feature_name":123.0,...}}`. First use `GET /api/v1/models/steel` to inspect required names. Every required feature must be supplied; missing or extra features return 422. If Kaggle export does not include a usable estimator or feature names, this endpoint correctly refuses inference rather than guessing feature semantics.
+## Reference / Rujukan
 
-## Important: joblib export contract
-
-Model files may be a direct scikit-learn estimator or dictionaries holding the estimator in `model`, `pipeline`, or `estimator` and optional `feature_columns`/`feature_names`. If a saved model uses a different schema, extend the loader **after inspecting the trusted artifact**, and add a test. Do **not** deserialize foreign joblib files. Always align the scikit-learn version to the training environment.
-
-## Scientific limits
-
-These are research estimates from chronological 60/20/20 splits, with champion selection on validation and test held out. Steel, household appliances, and per-consumer Electricity are separate domains, with differing target units. Do not compare raw MAE across domains as if units match. Peak cutoffs are defined from the training partition. Evaluation reports are historical, not live prediction or safety/operational decisions. Real forecast inference requires exact lag, rolling and timestamp feature availability from past observations only. Feature order, transformations, and sampling interval must match Kaggle. UI should label forecast CSV as **held-out historical evaluation**.
-
-## Deployment and security
-
-Run locally by default. Before public deployment: authentication, rate limiting, secure ingress/TLS, request budgets, monitoring, explicit CORS domains and model provenance are required. Large random-forest `.joblib` files can use substantial RAM. Avoid loading all champions simultaneously.
-
-## Troubleshooting
-
-- **404 metrics:** copy the exact `reports/evaluation/` files from Kaggle into repo.
-- **503 missing model:** supply the expected `.joblib` in `models/champion/`; this is optional for reports.
-- **422 feature mismatch:** call model inspection and submit every exact feature name, after reconstructing the original preprocessing.
-- **503 artifact load:** Python/scikit-learn versions may differ; re-export in a pinned environment.
-- **CORS:** set `ENERGYPEAK_CORS_ORIGINS` and restart.
-- **Large report:** use `limit` and `offset` pagination; default cap is 500 rows.
+[Root README](../README.md) · [Indonesian README](../docs/id/README.md)

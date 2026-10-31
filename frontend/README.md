@@ -1,62 +1,21 @@
-# EnergyPeak Predictor — Frontend
+# Frontend — EnergyPeak Predictor
 
-Research-oriented React/Vite/TypeScript user interface for the **Day 27/100 EnergyPeak Predictor** FastAPI backend.
+## Purpose / Tujuan
 
-## Before / Now / Next
+**Research layer:** Kaggle notebook creates reports and serialized artifacts. **API:** FastAPI serves health, series inventory, saved metrics, paginated forecast samples, audit/manifest reports and conditional model inspection/prediction. **UI:** React + Vite + TypeScript exposes Overview, Forecast Explorer, Model Inference and Research & Audit. Reports are read-only snapshots. `GET /api/v1/health`, `/api/v1/series`, `/api/v1/series/{series_id}/metrics`, `/api/v1/series/{series_id}/forecast`, `/api/v1/reports/model-manifest`, `/api/v1/reports/{name}`, `/api/v1/models/{series_id}`, `POST /api/v1/predict/{series_id}`. Inference requires the trusted local joblib, exact named historical features, and compatible sklearn version.
 
-- **Before:** notebook training, chronological splitting, source-separated experimental results, champion artifacts, held-out report generation.
-- **Now:** present the actual saved Kaggle metrics, forecast samples, research gate, manifests, and guarded local model inference.
-- **Next:** verify full data-contract compatibility and artifact feature schema; review visualizations against reports; conduct domain and near-duplicate audits, then consider production hardening separately.
+## Scientific safeguards
 
-## Setup (PowerShell)
+Supported: within-series, one-step-ahead retrospective evaluation, saved Kaggle metrics, trained champion selection on validation MAE, threshold-derived peak indicators. Unsupported: real-time IoT sensing, day-ahead dispatch, tariff/cost savings, peak guarantees, generic forecasts from timestamp alone, grid actuation or validated external generalization. Never equate model presence with successful deserialization or prediction readiness.
 
-From `D:\porto\100 day\day 27\EnergyPeak Predictor\frontend`:
+## Technical notes
 
-```powershell
-Copy-Item .env.example .env
-npm install
-npm run build
-npm run dev
-```
+`notebooks/` research master; `data/{raw,interim,processed,external}/` ignored local datasets; `models/{baseline,champion}/` local artifacts (not committed); `reports/{audit,evaluation,experiments,forecasts}/` saved results; `assets/plots/` fourteen real forecast PNGs; `assets/screenshots/` four app captures; `backend/app/` FastAPI; `frontend/src/` React; `docs/{en,id}/` paired documentation; `scripts/` helpers; `tests/` checks; `LICENSE` MIT. See `docs/en/repository-map.md` for a fuller map.
 
-Open http://127.0.0.1:5173. Start backend on http://127.0.0.1:8000, with model files under `models/champion/` and reports under `reports/evaluation`, `reports/forecasts`, `reports/audit`.
+## Validation
 
-`.env`:
+Backend: `cd backend`, activate Python virtual environment, `python -m pytest -q`, `python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000`; check `/docs` and `/api/v1/health`. Frontend: `cd frontend`, `npm install`, `npm run build`, `npm run dev`; inspect `http://127.0.0.1:5173`. Manual integration: exercise each series, forecast pagination and empty states, model schema and a legitimate 21-feature input, research gate and error handling. Screenshots show local application views, not proof all routes/models pass.
 
-```ini
-VITE_API_BASE_URL=http://127.0.0.1:8000
-```
+## Reference / Rujukan
 
-The base URL is normalized, so `/api/v1` is not accidentally duplicated.
-
-## Pages
-
-1. **Overview:** live connectivity status and saved steel experiment metrics plus dataset-scoped research framing.
-2. **Forecast Explorer:** saved held-out actual-vs-predicted line chart, paginated; MAE, RMSE, sMAPE, peak precision/recall/F1 and split sizes.
-3. **Model Inference:** uses `/models/{series_id}` schema and requires all numeric features before submitting to `/predict/{series_id}`. Disabled if model or feature schema unavailable.
-4. **Research & Audit:** read-only research gate, configurations, claim boundaries, electricity results, and model manifest.
-
-## Contract
-
-The implementation targets the companion **EnergyPeak_Day27_Full_FastAPI_Backend**: `/api/v1/health`, `/series`, `/series/{id}/metrics`, `/series/{id}/forecast`, `/reports/model-manifest`, `/reports/{name}`, `/models/{id}`, `/predict/{id}`. A model may be absent while reports remain available.
-
-## Safety and validity
-
-- This is a **research prototype**, not live grid data or automatic demand control.
-- Metrics are held-out retrospective results; report rows are historical experiment records, not live forecasts.
-- Never interpret a model prediction as an operational safety directive.
-- Steel, household appliances, and electricity clients do **not** have comparable units without normalization and source-specific analysis.
-- Peak labels derive from training P90 thresholds. No future target values should enter features.
-- Remote/untrusted `.joblib` must never be loaded by the backend.
-
-## Troubleshooting
-
-- **API offline:** run `python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000` inside `backend`, check `/api/v1/health` and CORS.
-- **404 report:** ensure Kaggle JSON/CSV artifacts were placed in `reports/evaluation/`, `reports/forecasts/` and `reports/audit/`.
-- **503 model:** copy trusted joblib from your Kaggle output to `models/champion` (not just `models/`).
-- **Schema unavailable:** backend can only infer when the saved artifact exposes a trusted ordered feature list; do not guess field order.
-- **TypeScript errors:** run `npm install` then `npm run build` and inspect diagnostics.
-
-## Tests
-
-`npm run typecheck` and `npm run build` check the frontend. Backend API tests are maintained separately. UI/API integration requires both services running.
+[Root README](../README.md) · [Indonesian README](../docs/id/README.md)
