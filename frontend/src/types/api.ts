@@ -1,0 +1,9 @@
+export type SeriesId = string;
+export type Metric = {dataset:string;champion?:string;target_unit?:string;train_n?:number;validation_n?:number;test_n?:number;MAE?:number;RMSE?:number;sMAPE_percent?:number;peak_f1?:number;peak_precision?:number;peak_recall?:number;peak_threshold_train_p90?:number;[key:string]:unknown};
+export type ForecastRow = {timestamp:string;actual:string;prediction:string;actual_peak?:string;predicted_peak?:string};
+export type Rows<T> = {rows:T[];columns:string[];limit:number;offset:number;source:string};
+export type SeriesList = {series:string[];count:number;source:string};
+export type Health = {status:string;service:string;version:string;production_validated:boolean;live_grid_connected:boolean;reports_available:boolean;series_count:number;model_files_available:Record<string,boolean>;report_dir:string};
+export type ModelInfo={series_id:string;available:boolean;expected_filename:string;supports_predict?:boolean;feature_names?:string[]|null;production_validated?:boolean};
+export type Prediction={series_id:string;prediction:number;n_features:number;method:string;production_validated:boolean;source:string};
+export type ApiError = Error & {status?:number};
